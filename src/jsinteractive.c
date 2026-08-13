@@ -941,6 +941,8 @@ void jsiSemiInit(bool autoLoad, JsfFileName *loadedFilename) {
           "Espruino is Open Source. Our work is supported\n"
           "only by sales of official boards and donations:\n"
           "http://espruino.com/Donate\n"
+          "\n"
+          "This is special build for TubeClock project\n"
 #endif
 #endif
         );
