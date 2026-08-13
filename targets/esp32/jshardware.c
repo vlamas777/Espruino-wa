@@ -158,8 +158,10 @@ void jshPinDefaultPullup() {
   // 6-11 are used by Flash chip
   // 32-33 are routed to rtc for xtal
   // 16-17 are used for PSRAM (future use)
+  //by VM 13 used as output, no pullup required
   jshPinSetStateRange(0,0,JSHPINSTATE_GPIO_IN_PULLUP);
-  jshPinSetStateRange(12,15,JSHPINSTATE_GPIO_IN_PULLUP);
+  jshPinSetStateRange(12,12,JSHPINSTATE_GPIO_IN_PULLUP);
+  jshPinSetStateRange(14,15,JSHPINSTATE_GPIO_IN_PULLUP);
   jshPinSetStateRange(18,19,JSHPINSTATE_GPIO_IN_PULLUP);
   jshPinSetStateRange(21,22,JSHPINSTATE_GPIO_IN_PULLUP);
   jshPinSetStateRange(25,27,JSHPINSTATE_GPIO_IN_PULLUP);
