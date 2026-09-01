@@ -82,7 +82,7 @@ static JsVar *g_jsScanCallback;
 static JsVar *g_jsAPStartedCallback;
 
 // A callback function to be invoked when we got time from SNTP.
-static JsVar *g_jssntpCallback
+static JsVar *g_jssntpCallback;
 
 // The last time we were connected as a station.
 static system_event_sta_connected_t g_lastEventStaConnected;
