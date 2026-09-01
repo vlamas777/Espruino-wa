@@ -1733,7 +1733,7 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
   jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
 }
 
-JsVar *jswrap_wifi_getSNTPstatus() {
+JsVar *jswrap_wifi_getSNTPstatus(void) {
 
   // Check current status
   sntp_sync_status_t status = sntp_get_sync_status();

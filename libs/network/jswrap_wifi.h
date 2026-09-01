@@ -32,5 +32,6 @@ void   jswrap_wifi_setHostname(JsVar *jsHostname, JsVar *jsCallback);
 void   jswrap_wifi_getHostByName(JsVar *jsHostname, JsVar *jsCallback);
 void   jswrap_wifi_ping(JsVar *jsHostname, JsVar *jsCallback);
 void   jswrap_wifi_setSNTP(JsVar *zone, JsVar *server);
+JsVar *jswrap_wifi_getSNTPstatus(void);
 void   jswrap_wifi_setIP(JsVar *jsSettings, JsVar *jsCallback);
 void   jswrap_wifi_setAPIP(JsVar *jsSettings, JsVar *jsCallback);
