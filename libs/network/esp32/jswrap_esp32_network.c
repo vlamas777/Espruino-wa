@@ -329,6 +329,22 @@ static char *wifiErrorToString(esp_err_t err){
   }
 }
 
+**
+ * Convert an sntp_sync_status_t data type to a string value.
+ */
+static char *SNTPstatusToString(sntp_sync_status_t status) {
+
+  switch(status) {
+  case SNTP_SYNC_STATUS_RESET:
+    return "SNTP_RESET";
+  case SNTP_SYNC_STATUS_COMPLETED:
+    return "SNTP_COMPLETED";
+  case SNTP_SYNC_STATUS_IN_PROGRESS:
+    return "SNTP_IN_PROGRESS";
+  }
+  return "unknown";
+} // End of htModeToString
+
 /**
  * Callback function that is invoked at the culmination of a scan.
  */
@@ -1715,6 +1731,14 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
   sntp_setservername(0, server);
   sntp_init();
   jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
+}
+
+JsVar *jswrap_wifi_getSNTPstatus() {
+
+  // Check current status
+  sntp_sync_status_t status = sntp_get_sync_status();
+
+  return jsvNewFromString(SNTPstatusToString(status));
 }
 
 /**
