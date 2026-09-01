@@ -329,7 +329,7 @@ static char *wifiErrorToString(esp_err_t err){
   }
 }
 
-**
+/**
  * Convert an sntp_sync_status_t data type to a string value.
  */
 static char *SNTPstatusToString(sntp_sync_status_t status) {
