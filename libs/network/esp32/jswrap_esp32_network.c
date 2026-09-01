@@ -81,6 +81,9 @@ static JsVar *g_jsScanCallback;
 // A callback function to be invoked when we are being an access point.
 static JsVar *g_jsAPStartedCallback;
 
+// A callback function to be invoked when we got time from SNTP.
+static JsVar *g_jssntpCallback
+
 // The last time we were connected as a station.
 static system_event_sta_connected_t g_lastEventStaConnected;
 
@@ -1709,7 +1712,27 @@ void jswrap_wifi_ping(
   ping_init();
 }
 
-void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
+/**
+ * Handle a response from sntp_set_time_sync_notification_cb.
+ * Invoke the callback function to inform the caller that ESP32 timer has been succefully
+ * synchronized with given NTP server.  The callback function should take a parameter that is time_t struct.
+ */
+void sntpResult(struct timeval *tv){
+
+  if (g_jssntpCallback != NULL) {
+
+    JsVar *jssntpResponse = jsvNewObject();
+    jsvObjectSetIntChild(jssntpResponse, "tv_sec", tv->tv_sec);
+    jsvObjectSetIntChild(jssntpResponse, "tv_usec", tv->tv_usec);
+    JsVar *params[1];
+    params[0] = jssntpResponse;
+    jsiQueueEvents(NULL, g_jsPingCallback, params, 1);
+    jsvUnLock(jssntpResponse);
+  }
+	return;
+}
+
+void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone, JsVar *sntpCallback) {
   if (!jsvIsString(jsZone)) {
     jsExceptionHere(JSET_ERROR, "Zone is not a string");
     return;
@@ -1719,6 +1742,23 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
     jsExceptionHere(JSET_ERROR, "Server is not a string");
     return;
   }
+
+  if (jsvIsUndefined(sntpCallback) || jsvIsNull(sntpCallback)) {
+    if (g_jssntpCallback != NULL) {
+      jsvUnLock(g_jssntpCallback);
+    }
+    g_jssntpCallback = NULL;
+  } else if (!jsvIsFunction(sntpCallback)) {
+      jsExceptionHere(JSET_ERROR, "Callback is not a function");
+    return;
+  } else {
+    if (g_jssntpCallback != NULL) {
+      jsvUnLock(g_jssntpCallback);
+    }
+    g_jssntpCallback = sntpCallback;
+    jsvLockAgainSafe(g_jssntpCallback);
+  }
+
   char zone[64];
   jsvGetString(jsZone, zone, 64);
 
@@ -1729,6 +1769,7 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
   tzset();
   sntp_setoperatingmode(SNTP_OPMODE_POLL);
   sntp_setservername(0, server);
+  sntp_set_time_sync_notification_cb(sntpResult);
   sntp_init();
   jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
 }
