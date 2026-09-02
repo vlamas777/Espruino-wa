@@ -1726,7 +1726,7 @@ void sntpResult(struct timeval *tv){
     jsvObjectSetIntChild(jssntpResponse, "tv_usec", tv->tv_usec);
     JsVar *params[1];
     params[0] = jssntpResponse;
-    jsiQueueEvents(NULL, g_jsPingCallback, params, 1);
+    jsiQueueEvents(NULL, g_jssntpCallback, params, 1);
     jsvUnLock(jssntpResponse);
   }
 	return;
