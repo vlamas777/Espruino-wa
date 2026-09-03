@@ -598,7 +598,35 @@ synchronized. The initial synchronization occurs asynchronously after setSNTP
 returns.
 */
 
+/*JSON{
+  "type"     : "staticmethod",
+  "class"    : "Wifi",
+  "name"     : "setSNTPcb",
+  "generate" : "jswrap_wifi_setSNTPcb",
+  "#if" : "defined(ESP8266) || defined(ESP32)",  
+  "params"   : [
+    ["server", "JsVar", "The NTP server to query, for example, `us.pool.ntp.org`"],
+    ["tz_offset", "JsVar", "Local time zone offset in the range -11..13."],
+    ["callback", "JsVar", "[optional] A `callback()` function to be called back when the SNTP synch started"]
+  ]
+}
+The same as setSNTP, but additionally provides a callback  to inform application about SNTP synchr esults
+*/
 
+/*JSON{
+  "type"     : "staticmethod",
+  "class"    : "Wifi",
+  "name"     : "getSNTPstatus",
+  "generate" : "jswrap_wifi_getSNTPstatus",
+  "#if" : "defined(ESP8266)  || defined(ESP32)",
+  "return"   : ["JsVar", "SNTP synch status: SNTP_RESET, SNTP_COMPLETED, SNTP_IN_PROGRESS"],
+  "params"   : [
+    
+  ]
+}
+Returns the setSNTP status as one of the following string
+SNTP_RESET, SNTP_COMPLETED, SNTP_IN_PROGRESS"
+*/
 
 /*JSON{
   "type"     : "staticmethod",

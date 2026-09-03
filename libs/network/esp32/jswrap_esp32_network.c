@@ -1732,7 +1732,32 @@ void sntpResult(struct timeval *tv){
 	return;
 }
 
-void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone, JsVar *sntpCallback) {
+void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
+  if (!jsvIsString(jsZone)) {
+    jsExceptionHere(JSET_ERROR, "Zone is not a string");
+    return;
+  }
+
+  if (!jsvIsString(jsServer)) {
+    jsExceptionHere(JSET_ERROR, "Server is not a string");
+    return;
+  }
+  char zone[64];
+  jsvGetString(jsZone, zone, 64);
+
+  char server[64];
+  jsvGetString(jsServer, server, 64);
+
+  setenv("TZ", zone, 1);
+  tzset();
+  sntp_setoperatingmode(SNTP_OPMODE_POLL);
+  sntp_setservername(0, server);
+  sntp_init();
+  jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
+}
+
+
+void jswrap_wifi_setSNTPcb(JsVar *jsServer, JsVar *jsZone, JsVar *sntpCallback) {
   if (!jsvIsString(jsZone)) {
     jsExceptionHere(JSET_ERROR, "Zone is not a string");
     return;
@@ -1773,6 +1798,7 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone, JsVar *sntpCallback) {
   sntp_init();
   jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
 }
+
 
 JsVar *jswrap_wifi_getSNTPstatus(void) {
 

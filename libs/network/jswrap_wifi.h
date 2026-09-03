@@ -31,11 +31,8 @@ JsVar *jswrap_wifi_getHostname(JsVar *jsCallback);
 void   jswrap_wifi_setHostname(JsVar *jsHostname, JsVar *jsCallback);
 void   jswrap_wifi_getHostByName(JsVar *jsHostname, JsVar *jsCallback);
 void   jswrap_wifi_ping(JsVar *jsHostname, JsVar *jsCallback);
-#ifdef ESP32
-	void   jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone, JsVar *jsCallback);
-#else
-    void   jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone);
-#endif
+void   jswrap_wifi_setSNTPcb(JsVar *jsServer, JsVar *jsZone, JsVar *jsCallback);
+void   jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone);
 JsVar *jswrap_wifi_getSNTPstatus(void);
 void   jswrap_wifi_setIP(JsVar *jsSettings, JsVar *jsCallback);
 void   jswrap_wifi_setAPIP(JsVar *jsSettings, JsVar *jsCallback);
