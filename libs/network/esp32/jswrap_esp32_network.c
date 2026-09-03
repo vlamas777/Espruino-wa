@@ -1717,7 +1717,8 @@ void jswrap_wifi_ping(
  * Invoke the callback function to inform the caller that ESP32 timer has been succefully
  * synchronized with given NTP server.  The callback function should take a parameter that is time_t struct.
  */
-void sntpResult(struct timeval *tv){
+#ifdef ESP32
+ void sntpResult(struct timeval *tv){
 
   if (g_jssntpCallback != NULL) {
 
@@ -1731,6 +1732,7 @@ void sntpResult(struct timeval *tv){
   }
 	return;
 }
+#endif
 
 void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
   if (!jsvIsString(jsZone)) {
@@ -1756,7 +1758,7 @@ void jswrap_wifi_setSNTP(JsVar *jsServer, JsVar *jsZone) {
   jsDebug(DBG_INFO, "SNTP: %s %s\n", server, zone);
 }
 
-
+#ifdef ESP32
 void jswrap_wifi_setSNTPcb(JsVar *jsServer, JsVar *jsZone, JsVar *sntpCallback) {
   if (!jsvIsString(jsZone)) {
     jsExceptionHere(JSET_ERROR, "Zone is not a string");
@@ -1807,6 +1809,7 @@ JsVar *jswrap_wifi_getSNTPstatus(void) {
 
   return jsvNewFromString(SNTPstatusToString(status));
 }
+#endif
 
 /**
  * Handle a response from esp_gethostbyname.
